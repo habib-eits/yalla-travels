@@ -54,7 +54,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <!-- enctype="multipart/form-data" -->
-                        <form action="{{ URL('/UmrahReport1') }}" method="post" name="form1" id="form1">
+                        <form action="{{ URL('/VendorUmrahReport1') }}" method="post" name="form1" id="form1">
                             {{ csrf_field() }}
 
 

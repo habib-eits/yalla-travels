@@ -127,6 +127,7 @@
         <div class="card-footer bg-light  ">
           <button type="submit" class="btn-disable btn btn-success w-lg float-right" id="online">Submit</button>
           <button type="submit" class="btn-disable btn btn-success w-lg float-right" id="pdf">PDF</button>
+          <button type="submit" class="btn-disable btn btn-primary w-lg float-right" id="excel">Export to Excel</button>
           <a href="{{URL('/')}}" class="btn-disable btn btn-secondary w-lg float-right">Cancel</a>
         </div>
       </div>
@@ -190,6 +191,13 @@
           $selectError.hide();
       }
   });
+
+  $('#excel').click(function(event){
+        event.preventDefault();
+        $('#form1').removeAttr('target');
+        $('#form1').attr('action', '{{URL("/PartyLedgerExcelExport")}}');
+        $('#form1').submit();
+    });
   </script>
 
 @endsection

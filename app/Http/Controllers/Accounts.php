@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMail;
 use App\Exports\SupplierLedgerExcel;
+use App\Exports\PartyLedgerExport;
 // for excel export
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -1495,6 +1496,18 @@ else
     return response()->json(['html' => $html], 200);
   }
 
+  private function formatNarration($paxName, $sector, $ticketNo, $passport, $departureDate)
+  {
+      $narration = [];
+      $narration[] = $paxName != null ? 'Pax: ' . $paxName : '';
+      $narration[] = $sector != null ? 'SEC: ' . $sector : '';
+      $narration[] = $ticketNo != null ? 'TKT: ' . $ticketNo : '';
+      $narration[] = $passport != null ? 'PP: ' . $passport : '';
+      $narration[] = $departureDate != null ? 'DEP DT: ' . $departureDate : '';
+
+      return implode(', ', $narration);
+  }
+
   public  function InvoiceCreate()
   {
 
@@ -1667,6 +1680,14 @@ else
     //  start for item array from invoice
     for ($i = 0; $i < count($request->ItemID0); $i++) {
 
+      $full_narration = $this->formatNarration(
+          $request->PaxName[$i],
+          $request->Sector[$i],
+          $request->TicketNo[$i],
+          $request->Passport[$i],
+          $request->DepartureDate[$i]
+      );
+
      if (!empty($request->TicketNo[$i])) {
     $airline_code = substr($request->TicketNo[$i], 0, 3);
     $airline = \App\Models\Airline::where('code', $airline_code)->first();
@@ -1718,7 +1739,7 @@ else
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->ItemTotal[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
 
           'Trace' => 105
         );
@@ -1733,7 +1754,7 @@ else
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 106
         );
         $id = DB::table('journal')->insertGetId($loop_purchase_cr);
@@ -1750,7 +1771,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => $request->Service[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 107
           );
 
@@ -1769,7 +1790,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => abs($request->Service[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 108
           );
 
@@ -1786,7 +1807,7 @@ else
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 109
         );
 
@@ -1802,7 +1823,7 @@ else
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 110
         );
 
@@ -1822,7 +1843,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => $request->TaxAmount[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 111
           );
           $id = DB::table('journal')->insertGetId($tax_payable);
@@ -1853,7 +1874,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => abs($request->TaxAmount[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 111
           );
           $id = DB::table('journal')->insertGetId($tax_payable);
@@ -1874,7 +1895,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => $request->Discount[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 203
           );
 
@@ -1901,7 +1922,7 @@ else
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->ItemTotal[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 201
         );
         $id = DB::table('journal')->insertGetId($loop_AR);
@@ -1918,7 +1939,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => $request->Service[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 202
           );
 
@@ -1933,7 +1954,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => abs($request->Service[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 2022
           );
 
@@ -1952,7 +1973,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => $request->Discount[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 203
           );
 
@@ -1967,7 +1988,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => abs($request->Discount[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 2033
           );
 
@@ -1984,7 +2005,7 @@ else
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 204
         );
 
@@ -2000,7 +2021,7 @@ else
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 205
         );
         $id = DB::table('journal')->insertGetId($loop_purchase_cr);
@@ -2015,7 +2036,7 @@ else
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 206
         );
 
@@ -2035,7 +2056,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => $request->TaxAmount[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 2111
           );
           $id = DB::table('journal')->insertGetId($tax_payable);
@@ -2066,7 +2087,7 @@ else
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => abs($request->TaxAmount[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,'Narration' => $full_narration,
             'Trace' => 2110
           );
           $id = DB::table('journal')->insertGetId($tax_payable);
@@ -2377,6 +2398,26 @@ $saleman = $query->get();
 
     //  start for item array from invoice
     for ($i = 0; $i < count($request->ItemID0); $i++) {
+      /*
+      $full_narration = implode(",", [
+          'Pax: ' . $request->PaxName[$i],
+          'Sector: ' . $request->Sector[$i],
+          'Ticket No: ' . $request->TicketNo[$i],
+          'Passport No: ' . $request->Passport[$i],
+          'Departure Date: ' . $request->DepartureDate[$i],
+      ]);
+      */
+      
+
+      $full_narration = $this->formatNarration(
+          $request->PaxName[$i],
+          $request->Sector[$i],
+          $request->TicketNo[$i],
+          $request->Passport[$i],
+          $request->DepartureDate[$i]
+      );
+
+      // dd($full_narration);
 
      if (!empty($request->TicketNo[$i])) {
     $airline_code = substr($request->TicketNo[$i], 0, 3);
@@ -2432,7 +2473,7 @@ $saleman = $query->get();
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->ItemTotal[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 305
         );
         $id305 = DB::table('journal')->insertGetId($loop_AR);
@@ -2446,7 +2487,7 @@ $saleman = $query->get();
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 306
         );
         $id306 = DB::table('journal')->insertGetId($loop_purchase_cr);
@@ -2463,7 +2504,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => $request->Service[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 307
           );
 
@@ -2478,7 +2519,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => abs($request->Service[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 307
           );
 
@@ -2495,7 +2536,7 @@ $saleman = $query->get();
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 308
         );
 
@@ -2511,7 +2552,7 @@ $saleman = $query->get();
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 309
         );
 
@@ -2531,7 +2572,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => $request->TaxAmount[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 310
           );
           $id310 = DB::table('journal')->insertGetId($tax_payable);
@@ -2547,7 +2588,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => abs($request->TaxAmount[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 310
           );
           $id310 = DB::table('journal')->insertGetId($tax_payable);
@@ -2584,7 +2625,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => $request->Discount[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 203
           );
 
@@ -2608,7 +2649,7 @@ $saleman = $query->get();
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->ItemTotal[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 201
         );
         $id = DB::table('journal')->insertGetId($loop_AR);
@@ -2625,7 +2666,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => $request->Service[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 202
           );
 
@@ -2640,7 +2681,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => abs($request->Service[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 2022
           );
 
@@ -2659,7 +2700,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => $request->Discount[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 203
           );
 
@@ -2674,7 +2715,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => abs($request->Discount[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 2033
           );
 
@@ -2691,7 +2732,7 @@ $saleman = $query->get();
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 204
         );
 
@@ -2707,7 +2748,7 @@ $saleman = $query->get();
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 205
         );
         $id = DB::table('journal')->insertGetId($loop_purchase_cr);
@@ -2722,7 +2763,7 @@ $saleman = $query->get();
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 206
         );
 
@@ -2742,7 +2783,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Dr' => $request->TaxAmount[$i],
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 2111
           );
           $id = DB::table('journal')->insertGetId($tax_payable);
@@ -2773,7 +2814,7 @@ $saleman = $query->get();
             'InvoiceMasterID' => $request->input('VHNO'),
             'Date' => $request->input('Date'),
             'Cr' => abs($request->TaxAmount[$i]),
-            'Narration' => $request->PaxName[$i],
+            'Narration' => $full_narration,
             'Trace' => 2110
           );
           $id = DB::table('journal')->insertGetId($tax_payable);
@@ -4238,7 +4279,6 @@ $monthlyBankCharges = DB::table('v_journal')
       ->orderBy('Date', 'asc') // Sort by Date in ascending order
       ->orderBy('JournalID', 'asc')   // Sort by ID in ascending order
       ->get();
-
     //          $pdf = PDF::loadView ('party_ledger1pdf',compact('journal','pagetitle','sql' ,'party')); 
     // //return $pdf->download('pdfview.pdf');
     //    $pdf->setpaper('A4', 'portiate');
@@ -5408,6 +5448,12 @@ else
   {
 
     return Excel::download(new SupplierLedgerExcel($request->SupplierID, $request->StartDate, $request->EndDate), 'supplierledger.xlsx');
+  }
+
+  function PartyLedgerExcelExport(request $request)
+  {
+
+    return Excel::download(new PartyLedgerExport($request->PartyID, $request->StartDate, $request->EndDate), 'partyledger.xlsx');
   }
 
   public function SupplierLedger1PDF(request $request)

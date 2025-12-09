@@ -215,7 +215,7 @@
                 <table width="50%" border="0" align="right">
 
                     <tr>
-                        <td height="25" align="right" style="padding-right: 25px;"><strong>Total</strong></td>
+                        <td height="25" align="right" style="padding-right: 25px;"><strong>{{__('message.total')}}</strong></td>
                         <td height="25"><strong>AED{{ number_format($invoice_mst[0]->Total, 2) }}</strong></td>
                     </tr>
 

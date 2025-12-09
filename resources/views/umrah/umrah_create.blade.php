@@ -351,7 +351,7 @@
                             <td><span>Pax Contact</span><span style="float: right; padding-right: 55px;">Pax Passport</span></td>
                             <td>Room Type</td>
                             <td>VAT</td>
-                            <td>Net Profit</td>
+                            <td>{{__('message.service')}}</td>
                             <td>Payment in Bus</td>
                             <td>Departure Date</td>
                           </tr>
@@ -518,7 +518,7 @@
                         <div class="form-group">
 
                           <label>
-                            <h5>Total: &nbsp;</h5>
+                            <h5>{{__('message.total')}}: &nbsp;</h5>
                           </label>
                           <div class="input-group">
                             <span class="input-group-text bg-light">AED</span>

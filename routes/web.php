@@ -12,31 +12,33 @@
 */
 
 
+use App\Http\Controllers\User;
+
+use App\Exports\PartyLedgerExport;
+ use App\Http\Controllers\Controller;
+use App\Http\Controllers\Accounts;
 use Illuminate\Support\Facades\DB;
 
-use App\Http\Controllers\User;
- use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChartOfAccount;
-
 // CRM CONTROLLERS
-use App\Http\Controllers\AjaxController;
+use Maatwebsite\Excel\Facades\Excel;
 
-use App\Http\Controllers\Accounts;
-use App\Http\Controllers\BranchController;
-use App\Http\Controllers\CampaignController;
-use App\Http\Controllers\LeadController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminDashboard;
+use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\ChartOfAccount;
  use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\UmrahController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\SubServiceController;
 use App\Http\Controllers\LeadActivityController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\AdminDashboard;
-use App\Http\Controllers\EstimateController;
-use App\Http\Controllers\UmrahController;
-use App\Http\Controllers\CompanyController;
-
+use App\Http\Controllers\VendorReportController;
 
 Route::get('/search-party', function () {
     $search = request('q');
@@ -562,6 +564,13 @@ Route::post('/SaveCompany', [CompanyController::class, 'SaveCompany']);
 Route::get('/CompanyEdit/{id}', [CompanyController::class, 'CompanyEdit']);
 Route::post('/CompanyUpdate/', [CompanyController::class, 'CompanyUpdate']);
 Route::get('/CompanyDelete/{id}', [CompanyController::class, 'CompanyDelete']);
+
+
+Route::get('/VendorUmrahReport/',[VendorReportController::class,'VendorUmrahReport']);
+Route::post('/VendorUmrahReport1/',[VendorReportController::class,'VendorUmrahReport1']);
+
+Route::get('vendor', [VendorReportController::class, 'index'])->name('vendor.index');
+Route::get('/VendorReport/{report_id}', [VendorReportController::class, 'show']);
 
 
     

@@ -128,7 +128,7 @@ body,td,th {
           <td width="15%" height="25" ><div align="center"><strong>SECTOR</strong></div></td>
           <td width="10%" height="25" ><div align="center"><strong>FARE</strong></div></td>
           <td width="10%" height="25" ><div align="center"><strong>O/P VAT </strong></div></td>
-          <td width="10%" height="25" ><div align="center"><strong>TOTAL</strong></div></td>
+          <td width="10%" height="25" ><div align="center"><strong>{{__('message.total')}}</strong></div></td>
         </tr>
         
         <tr >

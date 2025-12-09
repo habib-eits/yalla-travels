@@ -88,6 +88,7 @@
                 <a class="dropdown-item" href="{{URL('/TaxReport')}}">Tax Report</a>
                 <a class="dropdown-item" href="{{URL('/SupplierWiseSale')}}">Sales Report</a>
                 <a class="dropdown-item" href="{{URL('/UmrahReport')}}">Umrah Report</a>
+                <a class="dropdown-item" href="{{URL('/VendorUmrahReport')}}">Vendor Umrah Report</a>
                 <a class="dropdown-item" href="{{URL('/Log')}}">User's Log</a>
                                                 </div>
                                             </div><!-- /btn-group -->

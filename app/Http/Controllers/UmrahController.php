@@ -303,6 +303,15 @@ $validator = Validator::make($request->all(), [
 
 }
 
+private function formatNarration($PaxName, $RoomType, $Passport)
+  {
+      $narration = [];
+      $narration[] = $PaxName != null ? 'Pax: ' . $PaxName : '';
+      $narration[] = $RoomType != null ? 'RT: ' . $RoomType : '';
+      $narration[] = $Passport != null ? 'PP: ' . $Passport : '';
+      return implode(', ', $narration);
+  }
+
   
 
    public  function UmrahSave(request $request)
@@ -443,6 +452,11 @@ $validator = Validator::make($request->all(), [
 
 //  dd($request->all());
 
+$full_narration = $this->formatNarration(
+          $request->PaxName[$i],
+          $request->RoomType[$i],
+          $request->Passport[$i],
+      );
 
 
 
@@ -587,7 +601,7 @@ $validator = Validator::make($request->all(), [
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Paid[$i] -$request->deduction[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
 
           'Trace' => 105
         );
@@ -604,7 +618,7 @@ $validator = Validator::make($request->all(), [
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Paid[$i] - ($request->Service[$i] + $request->VAT[$i]),
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 106
         );
 
@@ -664,7 +678,7 @@ $validator = Validator::make($request->all(), [
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Paid[$i] - ($request->Service[$i] + $request->VAT[$i]),
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 109
         );
         $id = DB::table('journal')->insertGetId($loop_purchase_dr);
@@ -680,7 +694,7 @@ $validator = Validator::make($request->all(), [
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Paid[$i] - ($request->Service[$i] + $request->VAT[$i]),
-          'Narration' => $request->PaxName[$i],
+         'Narration' => $full_narration,
           'Trace' => 110
         );
 
@@ -779,7 +793,7 @@ $validator = Validator::make($request->all(), [
           'Date' => $request->input('Date'),
           'Cr' => $request->Paid[$i],
 
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
 
           'Trace' => 105
         );
@@ -797,7 +811,7 @@ $validator = Validator::make($request->all(), [
           'Date' => $request->input('Date'),
           'Dr' => ($request->Paid[$i]+$request->deduction[$i]) - ($request->Service[$i] + $request->VAT[$i]),
 
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 106
         );
 
@@ -886,7 +900,7 @@ $validator = Validator::make($request->all(), [
           'Date' => $request->input('Date'),
           'Cr' => ($request->Paid[$i]+$request->deduction[$i]) - ($request->Service[$i] + $request->VAT[$i]),
 
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 109
         );
         $id = DB::table('journal')->insertGetId($loop_purchase_dr);
@@ -903,7 +917,7 @@ $validator = Validator::make($request->all(), [
           'Date' => $request->input('Date'),
           'Dr' => ($request->Paid[$i]+$request->deduction[$i]) - ($request->Service[$i] + $request->VAT[$i]),
 
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 110
         );
 
@@ -1292,6 +1306,13 @@ $updatePaidValue = DB::table('invoice_master')
 
     //  start for item array from invoice
     for ($i = 0; $i < count($request->ItemID); $i++) {
+
+      $full_narration = $this->formatNarration(
+          $request->PaxName[$i],
+          $request->RoomType[$i],
+          $request->Passport[$i],
+      );
+
       $invoice_det = array(
         'InvoiceMasterID' => $request->input('VHNO'),
         'ItemID' => $request->ItemID[$i],
@@ -1443,7 +1464,7 @@ $updatePaidValue = DB::table('invoice_master')
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Paid[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
 
           'Trace' => 105
         );
@@ -1460,7 +1481,7 @@ $updatePaidValue = DB::table('invoice_master')
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Paid[$i] - ($request->Service[$i] + $request->VAT[$i]),
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 106
         );
 
@@ -1520,7 +1541,7 @@ $updatePaidValue = DB::table('invoice_master')
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Paid[$i] - ($request->Service[$i] + $request->VAT[$i]),
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 109
         );
         $id = DB::table('journal')->insertGetId($loop_purchase_dr);
@@ -1536,7 +1557,7 @@ $updatePaidValue = DB::table('invoice_master')
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Paid[$i] - ($request->Service[$i] + $request->VAT[$i]),
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 110
         );
 
@@ -1634,7 +1655,7 @@ $updatePaidValue = DB::table('invoice_master')
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Cr' => $request->Paid[$i],
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
 
           'Trace' => 105
         );
@@ -1651,7 +1672,7 @@ $updatePaidValue = DB::table('invoice_master')
           'InvoiceMasterID' => $request->input('VHNO'),
           'Date' => $request->input('Date'),
           'Dr' => $request->Paid[$i] - ($request->Service[$i] + $request->VAT[$i]),
-          'Narration' => $request->PaxName[$i],
+          'Narration' => $full_narration,
           'Trace' => 106
         );
 
