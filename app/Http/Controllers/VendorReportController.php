@@ -95,7 +95,6 @@ class VendorReportController extends Controller
             );
     }
 
-    // Step 2: Final Generate & Lock
     public function VendorReportLock(Request $request)
     {
         $request->validate([
@@ -159,8 +158,8 @@ class VendorReportController extends Controller
             return redirect()->back()->with('error', 'No records to lock!')->with('class', 'danger');
         }
 
-        return redirect('/VendorReports/' . $reportId)
-            ->with('success', "Vendor Report #$reportId successfully generated and locked by <strong>$generatedByName</strong>! ($totalLocked records)");
+        return redirect('/VendorReports/')
+            ->with('success', "Vendor Report successfully generated");
     }
 
     public function VendorReportView($id)
