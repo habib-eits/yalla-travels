@@ -398,7 +398,7 @@
                                                 <th class="col-md-3">Ref #</th>
                                                 <th class="col-md-3">PNR</th>
                                                 <th class="col-md-3">Sector</th>
-                                                <th>Total</th>
+                                                <th>{{__('message.total')}}</th>
                                                 <th>Paid</th>
                                                 <th class="col-md-3">ID</th>
                                                 <th class="col-md-3">Invoice Type</th>

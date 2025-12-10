@@ -299,14 +299,14 @@ $company = DB::table('company')->first();
                             <th width="10%">PAX Name</th>
                             <!-- <th width="8%">PNR</th> -->
                             <th width="5%">Sector</th>
-                            <th width="5%">Fare</th>
+                            <th width="5%">{{__('message.fare')}}</th>
                             <th width="5%">VAT%</th>
-                            <th width="5%">Service</th>
+                            <th width="5%">{{__('message.service')}}</th>
                             <th width="5%" class="d-none">O/P Vat</th>
                             <th width="5%" class="d-none">I/P VAT</th>
                           <!--   <th width="6%">VAT</th>
                             <th width="4%">Dis</th> -->
-                            <th width="7%">Total</th>
+                            <th width="7%">{{__('message.total')}}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -463,7 +463,7 @@ $company = DB::table('company')->first();
                         <div class="form-group">
 
                           <label>
-                            <h5>Total: &nbsp;</h5>
+                            <h5>{{__('message.total')}}: &nbsp;</h5>
                           </label>
                           <div class="input-group">
                             <span class="input-group-text bg-light">AED</span>

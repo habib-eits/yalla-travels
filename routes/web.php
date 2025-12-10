@@ -12,30 +12,31 @@
 */
 
 
-use Illuminate\Support\Facades\DB;
-
 use App\Http\Controllers\User;
- use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChartOfAccount;
-
-// CRM CONTROLLERS
-use App\Http\Controllers\AjaxController;
 
 use App\Http\Controllers\Accounts;
-use App\Http\Controllers\BranchController;
-use App\Http\Controllers\CampaignController;
+ use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+
+// CRM CONTROLLERS
+use App\Http\Controllers\AdminDashboard;
+
+use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\ChartOfAccount;
 use App\Http\Controllers\LeadController;
- use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StaffController;
+ use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\UmrahController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\SubServiceController;
 use App\Http\Controllers\LeadActivityController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\AdminDashboard;
-use App\Http\Controllers\EstimateController;
-use App\Http\Controllers\UmrahController;
-use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\VendorReportController;
 
 
 Route::get('/search-party', function () {
@@ -65,7 +66,7 @@ route::post('/paymentSummary1/',[Accounts::class,'paymentSummary1']);
 
 
 Route::get('/',[Accounts::class,'Login']);
-Route::get('/Login',[Accounts::class,'Login']);
+Route::get('/Login',[Accounts::class,'Login'])->name('login');
 Route::post('/UserVerify',[Accounts::class,'UserVerify']);
 
 
@@ -552,6 +553,20 @@ route::get('/UmrahRefund/{id}',[UmrahController::class,'UmrahRefund']);
 
 Route::get('/UmrahReport/',[UmrahController::class,'UmrahReport']);
 Route::post('/UmrahReport1/',[UmrahController::class,'UmrahReport1']);
+
+Route::get('/VendorReports', [VendorReportController::class, 'index'])->name('vendor.reports');
+Route::get('/VendorUmrahReport', [VendorReportController::class, 'VendorUmrahReport']);
+Route::post('/VendorReportPreview', [VendorReportController::class, 'VendorReportPreview']);
+Route::post('/VendorReportLock', [VendorReportController::class, 'VendorReportLock']);
+Route::get('/VendorReportView/{id}', [VendorReportController::class, 'VendorReportView'])->name('vendor.report.view');
+Route::get('/VendorReportPDF/{id}', [VendorReportController::class, 'VendorReportPDF'])->name('vendor.report.pdf');
+
+// Per Supplier PDFs
+Route::get('/VendorReportSupplierPDF/{report_id}/{supplier_id}', [VendorReportController::class, 'VendorReportSupplierPDF'])
+    ->name('vendor.report.supplier.pdf');
+Route::get('/VendorReportSupplierVendorPDF/{report_id}/{supplier_id}', [VendorReportController::class, 'VendorReportSupplierVendorPDF'])
+    ->name('vendor.report.supplier.vendor.pdf');
+	
 Route::get('/UmrahReport1PDF/{supplierid}/{startdate}/{enddate}/{type}/{itemid?}',[UmrahController::class,'UmrahReport1PDF']);
 Route::get('/UmrahReport2PDF/{supplierid}/{startdate}/{enddate}/{type}/{itemid?}',[UmrahController::class,'UmrahReport2PDF']);
 

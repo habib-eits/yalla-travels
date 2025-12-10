@@ -230,14 +230,14 @@
                             <th width="10%">PAX Name</th>
                             <!-- <th width="8%">PNR</th> -->
                             <th width="5%">Sector</th>
-                            <th width="5%">Fare</th>
+                            <th width="5%">{{__('message.fare')}}</th>
                             <th width="5%">VAT%</th>
-                            <th width="5%">Service</th>
+                            <th width="5%">{{__('message.service')}}</th>
                             <th width="5%" class="d-none">O/P Vat</th>
                             <th width="5%" class="d-none">I/P VAT</th>
                           <!--   <th width="6%">VAT</th>
                             <th width="4%">Dis</th> -->
-                            <th width="7%">Total</th>
+                            <th width="7%">{{__('message.total')}}</th>
                           </tr>
                         </thead>
           <tbody>
@@ -382,10 +382,10 @@
           </div>
           <div class="form-group">
             
-            <label><h5>Total: &nbsp;</h5></label>
+            <label><h5>{{__('message.total')}}: &nbsp;</h5></label>
             <div class="input-group">
 <span class="input-group-text bg-light">AED</span>              
-              <input type="number" name="Total" class="form-control" step="0.01" id="totalAftertax" placeholder="Total" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" value="{{$invoice_mst[0]->Total}}">
+              <input type="number" name="Total" class="form-control" step="0.01" id="totalAftertax" placeholder="{{__('message.total')}}" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" value="{{$invoice_mst[0]->Total}}">
             </div>
           </div>
           
@@ -393,10 +393,10 @@
           
           <div class="form-group">
             
-            <label><h5>Total: &nbsp;</h5></label>
+            <label><h5>{{__('message.total')}}: &nbsp;</h5></label>
             <div class="input-group">
 <span class="input-group-text bg-light">AED</span>              
-              <input type="number" name="GrandTotal" class="form-control" step="0.01" id="GrandTotal" placeholder="Total" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" value="{{$invoice_mst[0]->Total}}">
+              <input type="number" name="GrandTotal" class="form-control" step="0.01" id="GrandTotal" placeholder="{{__('message.total')}}" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" value="{{$invoice_mst[0]->Total}}">
             </div>
           </div>
           
@@ -536,14 +536,14 @@ var i = $('table tr').length;
         html += '<td><input type="text" name="PaxName[]" id="PaxName_' + i + '" class="form-control" placeholder="PaxName"><input type="text" name="TicketNo[]" id="TicketNo_' + i + '" class="form-control  " autocomplete="off" placeholder="Ticket No"></td>';
         // html += '<td>pnr</td>';
         html += '<td><input type="text" name="Sector[]" id="Sector_' + i + '" class="form-control" placeholder="Sector"><input type="text" name="PNR[]" id="PNR_' + i + '" class="form-control" placeholder="PNR"></td>';
-        html += '<td><input type="text" required name="Fare[]" id="Fare_' + i + '" class="form-control" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="Fare"><input type="text" name="Passport[]" id="Passport_' + i + '" class="form-control  " autocomplete="off" placeholder="Passport #"></td>';
+        html += '<td><input type="text" required name="Fare[]" id="Fare_' + i + '" class="form-control" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="{{__('message.fare')}}"><input type="text" name="Passport[]" id="Passport_' + i + '" class="form-control  " autocomplete="off" placeholder="Passport #"></td>';
         html += '<td><input type="text" name="Taxable[]" id="Taxable_' + i + '" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"  placeholder="VAT%"><input type="text" name="TaxAmount[]" id="TaxAmount_' + i + '" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="VAT Amt"></td>';
-        html += '<td><input type="text" name="Service[]" id="Service_' + i + '" class="form-control" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="Service"><input type="text" name="Discount[]" id="discount_' + i + '" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="Discount"></td>';
+        html += '<td><input type="text" name="Service[]" id="Service_' + i + '" class="form-control" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="{{__('message.service')}}"><input type="text" name="Discount[]" id="discount_' + i + '" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="Discount"></td>';
         html += '<td class="d-none"><input type="text" name="OPVAT[]" id="OPVAT_' + i + '" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></td>';
         html += '<td class="d-none"><input type="text" name="IPVAT[]" id="IPVAT_' + i + '" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></td>';
         // html += '<td>tax</td>';
         // html += '<td>service</td>';
-        html += '<td><input type="text" required name="ItemTotal[]" id="total_' + i + '" class="form-control totalLinePrice changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="Total"><input type="date" name="DepartureDate[]" id="DepartureDate_' + i + '" class="form-control"></td>';
+        html += '<td><input type="text" required name="ItemTotal[]" id="total_' + i + '" class="form-control totalLinePrice changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" placeholder="{{__('message.total')}}"><input type="date" name="DepartureDate[]" id="DepartureDate_' + i + '" class="form-control"></td>';
         
 
 
