@@ -303,12 +303,14 @@ $validator = Validator::make($request->all(), [
 
 }
 
-private function formatNarration($PaxName, $RoomType, $Passport)
+private function formatNarration($PaxName, $RoomType, $Passport, $departureDate)
   {
       $narration = [];
       $narration[] = $PaxName != null ? 'Pax: ' . $PaxName : '';
       $narration[] = $RoomType != null ? 'RT: ' . $RoomType : '';
       $narration[] = $Passport != null ? 'PP: ' . $Passport : '';
+      $narration[] = $departureDate != null ? 'DEP DT: ' . $departureDate : '';
+
       return implode(', ', $narration);
   }
 
@@ -456,6 +458,7 @@ $full_narration = $this->formatNarration(
           $request->PaxName[$i],
           $request->RoomType[$i],
           $request->Passport[$i],
+          $request->DepartureDate[$i],
       );
 
 
@@ -1311,6 +1314,7 @@ $updatePaidValue = DB::table('invoice_master')
           $request->PaxName[$i],
           $request->RoomType[$i],
           $request->Passport[$i],
+          $request->DepartureDate[$i],
       );
 
       $invoice_det = array(
