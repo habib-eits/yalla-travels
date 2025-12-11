@@ -39,6 +39,7 @@ use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\SubServiceController;
 use App\Http\Controllers\LeadActivityController;
 use App\Http\Controllers\VendorReportController;
+use App\Http\Controllers\ItemComparisonController;
 
 Route::get('/search-party', function () {
     $search = request('q');
@@ -571,6 +572,10 @@ Route::post('/VendorUmrahReport1/',[VendorReportController::class,'VendorUmrahRe
 
 Route::get('vendor', [VendorReportController::class, 'index'])->name('vendor.index');
 Route::get('/VendorReport/{report_id}', [VendorReportController::class, 'show']);
+
+Route::get('/comparison-ItemWiseSale1/',[ItemComparisonController::class,'CompItemwiseSale']);
+Route::post('/comparison-ItemWiseSale/',[ItemComparisonController::class,'CompItemWiseSale2']);
+Route::post('/comparison-clear', [ItemComparisonController::class, 'clear']);
 
 
     
