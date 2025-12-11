@@ -529,11 +529,11 @@
                         </div>
                         
                          <div class="form-group mt-3">
-  <label>
+  <label class="d-none">
     <h5>Bank Charges:</h5>
   </label>
 
-  <div class="row">
+  <div class="row d-none">
     <!-- Dropdown -->
     <div class="col-md-4">
       <select name="BankName" class="form-select">
