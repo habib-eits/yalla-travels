@@ -8360,34 +8360,116 @@ public function query()
     }
 
 
-  public  function ItemwiseSale2(request $request)
+  // public  function ItemwiseSale2(request $request)
 
-    {
+  //   {
 
-       $pagetitle='Itemwise Sale';
+  //      $pagetitle='Itemwise Sale';
 
-         $today_sale = DB::table('v_invoice_detail22')
-    ->select(
-        'ItemName','ItemID',
-        DB::raw('count(*) as Total'),
-        DB::raw('sum(Total) as Invoice'),
-        DB::raw('sum(Service) as Profit'),
-        DB::raw('sum(Service)/sum(Total) as Percentage')
-    )
-      ->whereBetween('Date', array($request->StartDate, $request->EndDate))
-           ->orderBy('Total', 'desc') // ✅ order by alias
+  //        $today_sale = DB::table('v_invoice_detail22')
+  //   ->select(
+  //       'ItemName','ItemID',
+  //       DB::raw('count(*) as Total'),
+  //       DB::raw('sum(Total) as Invoice'),
+  //       DB::raw('sum(Service) as Profit'),
+  //       DB::raw('sum(Service)/sum(Total) as Percentage')
+  //   )
+  //     ->whereBetween('Date', array($request->StartDate, $request->EndDate))
+  //          ->orderBy('Total', 'desc') // ✅ order by alias
 
-     ->groupBy('ItemName','ItemID')
-    ->get();
+  //    ->groupBy('ItemName','ItemID')
+  //   ->get();
 
  
 
                 
-    return view ('reports.itemwise_sale2',compact('pagetitle','today_sale'));
-    }
-    
-    
-    
+  //   return view ('reports.itemwise_sale2',compact('pagetitle','today_sale'));
+  //   }
+
+        public function ItemwiseSale2(Request $request)
+            {
+              $pagetitle = "Itemwise Sale";
+
+              $start = Carbon::parse($request->StartDate);
+              $end   = Carbon::parse($request->EndDate);
+
+              $compareType = $request->compareType;
+              $periods     = (int)$request->periodCount;
+
+              if ($periods < 0) $periods = 0;
+              if ($periods > 12) $periods = 12;
+
+              // Build ranges
+              $ranges = [];
+
+              $ranges[] = [
+              'label' => 'Current',
+              'start' => $start->format('Y-m-d'),
+              'end'   => $end->format('Y-m-d'),
+              'title' => $start->format('d-M-Y') . " to " . $end->format('d-M-Y')
+              ];
+
+
+              for ($i = 1; $i <= $periods; $i++) {
+
+              $ps = $start->copy();
+              $pe = $end->copy();
+
+              if ($compareType == "year") {
+                  $ps->subYears($i);
+                  $pe->subYears($i);
+                  $label = "-{$i}Y";
+                } else {
+                  $ps->subMonths($i);
+                  $pe->subMonths($i);
+                  $label = "-{$i}M";
+              }
+              $ranges[] = [
+                  'label' => $ps->format('d-M-Y') . " to " . $pe->format('d-M-Y'),
+                  'start' => $ps->format('Y-m-d'),
+                  'end'   => $pe->format('Y-m-d'),
+                ];
+
+              }
+
+              // Fetch all items once to align rows
+              $allItems = DB::table('v_invoice_detail22')
+              ->select('ItemID', 'ItemName')
+              ->groupBy('ItemID', 'ItemName')
+              ->orderBy('ItemName')
+             ->get();
+
+            // Fetch sales per period
+              $periodData = [];
+
+              foreach ($ranges as $r) {
+
+              $data = DB::table('v_invoice_detail22')
+                      ->select(
+                              'ItemID',
+                      DB::raw('count(*) as Total'),
+                      DB::raw('sum(Total) as Invoice'),
+                      DB::raw('sum(Service) as Profit')
+                      )
+                      ->whereBetween('Date', [$r['start'], $r['end']])
+                      ->groupBy('ItemID')
+                      ->get()
+                      ->keyBy('ItemID');
+
+              $periodData[] = [
+                  'label' => $r['label'],
+                  'data'  => $data
+                  ];
+            }
+
+              return view("reports.itemwise_sale2", compact(
+                        'pagetitle',
+                        'allItems',
+                        'periodData',
+                        'ranges'
+              ));
+      }
+
     public  function ItemWiseSale2Showall()
 
     {

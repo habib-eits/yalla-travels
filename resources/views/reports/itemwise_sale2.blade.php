@@ -1,203 +1,275 @@
 @extends('template.tmp')
-
 @section('title', $pagetitle)
- 
-
 @section('content')
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
 
-<div class="main-content">
+    <div class="main-content">
 
- <div class="page-content">
- <div class="container-fluid">
-  <!-- start page title -->
-                         
- @if (session('error'))
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
 
- <div class="alert alert-{{ Session::get('class') }} p-1" id="success-alert">
-                    
-                   {{ Session::get('error') }}  
+                @if (session('error'))
+                    <div class="alert alert-{{ Session::get('class') }} p-1" id="success-alert">
+
+                        {{ Session::get('error') }}
+                    </div>
+                @endif
+
+                @if (count($errors) > 0)
+
+                    <div>
+                        <div class="alert alert-danger p-1   border-3">
+                            <p class="font-weight-bold"> There were some problems with your input.</p>
+                            <ul>
+
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
+                @endif
+
+                <div class="row ">
+                    <div class="col-md-3">
+                        <div class="page-title-box">
+                            <h4 class="mb-sm-0 font-size-18 pt-3">Itemwise Sale</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <form action="{{ URL('/ItemWiseSale2') }}" method="post" name="form1" id="form1"
+                            class="form-inline w-100 d-flex align-items-center">
+                            @csrf
+
+                            <div class="row  p-2 rounded-3 w-100">
+                                <div class="row  ">
+
+                                    <!-- Date Range Selector -->
+                                    <div class="col-md-2">
+                                        <label for="dateRangeSelector" class="form-label">Select Date Range</label>
+                                        <select id="dateRangeSelector" name="dateRangeSelector" class="form-select">
+                                            <option value="">Select Date Range</option>
+                                            <option value="Today">Today</option>
+                                            <option value="Yesterday">Yesterday</option>
+                                            <option value="This Week">This Week</option>
+                                            <option value="This Month">This Month</option>
+                                            <option value="This Quarter">This Quarter</option>
+                                            <option value="This Year">This Year</option>
+                                            <option value="Year to Date">Year to Date</option>
+                                            <option value="Previous Week">Previous Week</option>
+                                            <option value="Previous Month">Previous Month</option>
+                                            <option value="Previous Quarter">Previous Quarter</option>
+                                            <option value="Previous Year">Previous Year</option>
+                                            <option value="Custom Range">Custom Range</option>
+                                        </select>
+                                    </div>
+
+                                    {{-- Compared --}}
+                                    <div class="col-md-2">
+                                        <label for="dateRangeSelector">Compared</label>
+                                        <select id="dateRangeSelector" name="compareType" class="form-select">
+                                            <option value="">Select</option>
+                                            <option value="year">Year</option>
+                                            <option value="month">Month</option>
+
+                                        </select>
+                                    </div>
+
+                                    {{-- Periods --}}
+                                    <div class="col-md-2">
+                                        <label for="dateRangeSelector">Periods</label>
+                                        <select id="dateRangeSelector" name="periodCount" class="form-select">
+                                            <option value="">Select</option>
+                                            @for ($i = 1; $i <= 10; $i++)
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+                                    <!-- Start Date -->
+                                    <div class="col-md-2">
+                                        <label for="StartDate" class="form-label">Start Date</label>
+                                        <input type="date" id="StartDate" name="StartDate" class="form-control"
+                                            value="{{ request()->StartDate }}">
+                                    </div>
+
+                                    <!-- End Date -->
+                                    <div class="col-md-2">
+                                        <label for="EndDate" class="form-label">End Date</label>
+                                        <input type="date" id="EndDate" name="EndDate" class="form-control"
+                                            value="{{ request()->EndDate }}">
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="col-md-2 text-end mt-4">
+                                        <button type="submit" class="btn btn-primary w-100">Generate Report</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
-@endif
+                <div class="card">
+                    <div class="card-body">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
 
- @if (count($errors) > 0)
-                                 
-                            <div >
-                <div class="alert alert-danger p-1   border-3">
-                   <p class="font-weight-bold"> There were some problems with your input.</p>
-                    <ul>
-                        
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
 
-                        @endforeach
-                    </ul>
-                </div>
-                </div>
- 
-            @endif
+                            <tr>
+                                <td width="50%">From {{ dateformatman2(request()->StartDate) }} -
+                                    {{ dateformatman2(request()->EndDate) }}</td>
+                                <td width="50%">
+                                    <div align="right">DATED: {{ date('d-m-Y') }}</div>
+                                </td>
 
-           
-           
-<div class="row ">
-    <div class="col-md-3">
-        <div class="page-title-box">
-            <h4 class="mb-sm-0 font-size-18 pt-3">Itemwise Sale</h4>
-        </div>
-    </div>
-    
-    <div class="col-md-9">
-        <form action="{{URL('/ItemWiseSale2')}}" method="post" name="form1" id="form1" class="form-inline w-100 d-flex align-items-center">
-            @csrf
+                            </tr>
+                        </table>
+                        {{-- <div class="table-responsive">
+                            <table class="table table-bordered table-striped  table-sm" id="salesTable">
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th width="5%">S.NO</th>
+                                        <th width="30%">ITEM NAME</th>
+                                        <th width="10%" class="text-center">NO OF SALES</th>
+                                        <th width="10%" class="text-center">TOTAL INVOICE</th>
+                                        <th width="10%" class="text-center">PROFIT</th>
+                                    </tr>
+                                </thead>
 
-     <div class="row  p-2 rounded-3 w-100">
-               <div class="row  ">
+                                <?php
+                                
+                                $total = 0;
+                                $profit = 0;
+                                $invoice = 0;
+                                
+                                ?>
+                                <tbody>
+                                    @foreach ($today_sale as $key => $value)
+                                        <?php
+                                        
+                                        $total += $value->Total;
+                                        $profit += $value->Profit;
+                                        $invoice += $value->Invoice;
+                                        
+                                        ?>
 
-                <!-- Date Range Selector -->
-                <div class="col-md-3">
-                    <label for="dateRangeSelector" class="form-label">Select Date Range</label>
-                    <select id="dateRangeSelector" name="dateRangeSelector" class="form-select">
-                        <option value="">Select Date Range</option>
-                        <option value="Today">Today</option>
-                        <option value="Yesterday">Yesterday</option>
-                        <option value="This Week">This Week</option>
-                        <option value="This Month">This Month</option>
-                        <option value="This Quarter">This Quarter</option>
-                        <option value="This Year">This Year</option>
-                        <option value="Year to Date">Year to Date</option>
-                        <option value="Previous Week">Previous Week</option>
-                        <option value="Previous Month">Previous Month</option>
-                        <option value="Previous Quarter">Previous Quarter</option>
-                        <option value="Previous Year">Previous Year</option>
-                        <option value="Custom Range">Custom Range</option>
-                    </select>
-                </div>
+                                        <tr>
+                                            <td>
+                                                <div align="center">{{ $key + 1 }}.</div>
+                                            </td>
+                                            <td> <a href="{{ URL('/InvoiceDetailList') . '/' . $value->ItemID . '/' . request()->StartDate . '/' . request()->EndDate }}"
+                                                    target="_blank">{{ $value->ItemName }}</a></td>
+                                            <td align="center">{{ $value->Total }}</td>
+                                            <td align="center">{{ number_format($value->Invoice, 2) }}</td>
+                                            <td>
+                                                <div align="center">
+                                                    {{ $value->Profit > 0 ? number_format($value->Profit, 2) : '' }}</div>
+                                            </td>
 
-                <!-- Start Date -->
-                <div class="col-md-3">
-                    <label for="StartDate" class="form-label">Start Date</label>
-                    <input type="date" id="StartDate" name="StartDate" class="form-control" value="{{ request()->StartDate }}">
-                </div>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot style="font-weight: bolder;">
 
-                <!-- End Date -->
-                <div class="col-md-3">
-                    <label for="EndDate" class="form-label">End Date</label>
-                    <input type="date" id="EndDate" name="EndDate" class="form-control" value="{{ request()->EndDate }}">
-                </div>
+                                    <tr style="font-weight: bolder;">
+                                        <td colspan="2" class="text-center"><strong>Grand Total</strong></td>
+                                        <td class="text-center">{{ number_format($total) }}</td>
+                                        <td class="text-center">{{ number_format($invoice, 2) }}</td>
+                                        <td class="text-center">{{ number_format($profit, 2) }}</td>
 
-                <!-- Submit Button -->
-                <div class="col-md-3 text-end mt-4">
-                    <button type="submit" class="btn btn-primary w-100">Generate Report</button>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div> --}}
+                        <div class="table-responsive" style="overflow-x:auto; white-space:nowrap;">
+                            <table class="table table-bordered table-striped table-sm">
+
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th>S.NO</th>
+                                        <th>ITEM NAME</th>
+
+                                        {{-- Dynamic columns for each period --}}
+                                        @foreach ($periodData as $p)
+                                            <th class="text-center">
+                                                Sales <br> <small>{{ $p['label'] }}</small>
+                                            </th>
+                                            <th class="text-center">
+                                                Invoice <br> <small>{{ $p['label'] }}</small>
+                                            </th>
+                                            <th class="text-center">
+                                                Profit <br> <small>{{ $p['label'] }}</small>
+                                            </th>
+                                        @endforeach
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach ($allItems as $k => $item)
+                                        <tr>
+                                            <td>{{ $k + 1 }}</td>
+                                            <td>{{ $item->ItemName }}</td>
+
+                                            {{-- Loop each period and show values --}}
+                                            @foreach ($periodData as $p)
+                                                @php
+                                                    $row = $p['data'][$item->ItemID] ?? null;
+                                                @endphp
+
+                                                <td class="text-center">{{ $row->Total ?? 0 }}</td>
+                                                <td class="text-center">{{ number_format($row->Invoice ?? 0, 2) }}</td>
+                                                <td class="text-center">{{ number_format($row->Profit ?? 0, 2) }}</td>
+                                            @endforeach
+
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+
+                            </table>
+                        </div>
+
+
+                    </div>
                 </div>
 
             </div>
-     </div>
-        </form>
-    </div>
-</div>
-         
-            
-  <div class="card">
-      <div class="card-body">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    
-  
-    <tr>
-      <td width="50%">From {{dateformatman2(request()->StartDate)}} - {{dateformatman2(request()->EndDate)}}</td>
-    <td width="50%"><div align="right">DATED: {{date('d-m-Y')}}</div></td>
-    
-    </tr>
-  </table>
-  <div class="table-responsive">
-  <table class="table table-bordered table-striped  table-sm" id="salesTable">
-    <thead>
-    <tr class="bg-light">
-      <th width="5%">S.NO</th>
-      <th width="30%">ITEM NAME</th>
- <th width="10%" class="text-center">NO OF SALES</th>
-<th width="10%" class="text-center">TOTAL INVOICE</th>
-<th width="10%" class="text-center">PROFIT</th>
-     </tr>
-  </thead>
- 
-<?php   
-
-$total=0;
-$profit=0;
-$invoice=0;
-
- ?>
-  <tbody>
-@foreach ($today_sale as $key => $value)
-     
-
-     <?php  
-
-      $total +=$value->Total;
-      $profit +=$value->Profit;
-      $invoice +=$value->Invoice;
-
-      ?>
-
-    <tr>
-      <td><div align="center">{{$key+1}}.</div></td>
-      <td>  <a href="{{URL('/InvoiceDetailList').'/'.$value->ItemID.'/'.request()->StartDate.'/'.request()->EndDate}}" target="_blank">{{$value->ItemName}}</a></td>
-      <td align="center">{{$value->Total}}</td>
-      <td align="center">{{number_format($value->Invoice,2)}}</td>
-      <td><div align="center">{{ $value->Profit > 0 ? number_format($value->Profit, 2) : '' }}</div></td>
-       
-    </tr>
-@endforeach
- </tbody>
-   <tfoot style="font-weight: bolder;">
-
-<tr style="font-weight: bolder;">
-  <td colspan="2" class="text-center" ><strong>Grand Total</strong></td>
-  <td class="text-center">{{number_format($total)}}</td>
-  <td class="text-center">{{number_format($invoice,2)}}</td>
-  <td class="text-center">{{number_format($profit,2)}}</td>
- 
-</tr>
-</tfoot>
-  </table>       
-      </div>
-      </div>
-  </div>
-  
-  </div>
-</div>
-
         </div>
-      </div>
+
+    </div>
+    </div>
     </div>
     <!-- END: Content-->
- <script>
-$(document).ready(function() {
-    $('#salesTable').DataTable({
-        "paging": false,       // disable pagination
-        "info": false,         // disable info text
-        "ordering": true,      // enable sorting
-        "searching": false     // disable search bar
-    });
-});
-</script>
+    <script>
+        $(document).ready(function() {
+            $('#salesTable').DataTable({
+                "paging": false, // disable pagination
+                "info": false, // disable info text
+                "ordering": true, // enable sorting
+                "searching": false // disable search bar
+            });
+        });
+    </script>
 
-<script>
-        $(document).ready(function () {
+    <script>
+        $(document).ready(function() {
             // Handle the date range selection
-            $('#dateRangeSelector').on('change', function () {
+            $('#dateRangeSelector').on('change', function() {
                 let range = $(this).val();
                 let startDate = null;
                 let endDate = null;
@@ -259,4 +331,4 @@ $(document).ready(function() {
             });
         });
     </script>
-  @endsection
+@endsection
