@@ -307,7 +307,7 @@ $today_sale = DB::table('v_journal')
         <div class="col-md-4 col-xl-3">
             <div class="card bg-c-pink order-card">
                 <div class="card-block">
-                    <h6 class="m-b-20 text-white">TODAY'S TOTAL SALEs</h6>
+                    <h6 class="m-b-20 text-white">TODAY'S TOTAL SALE</h6>
                     <h2 class="text-end text-white mt-3"><i class="fa fa-credit-card f-left"></i><span>{{number_format($today_sale->TOTAL_SALE)}}</span></h2>
                  </div>
             </div>
