@@ -1117,9 +1117,11 @@ try {
   {
     if ($request->ajax()) {
       $category = $request->get('category');
+     
       $accounts = DB::table('chartofaccount')
         ->where('Category', strtoupper($category))
         ->get(); // Retrieve all accounts for the selected category
+         dd($accounts);
       return response()->json($accounts);
     }
     return response()->json([], 400); // Return an empty array and a 400 status code if the request is not AJAX
@@ -1536,7 +1538,15 @@ else
 
     $saleman = $query->get();
 
-    $vhno = DB::table('invoice_master')->select(DB::raw('IFNULL(max(InvoiceMasterID)+1,1) as VHNO'))->get();
+    // $vhno = DB::table('invoice_master')->select(DB::raw('IFNULL(max(InvoiceMasterID)+1,1) as VHNO'))->get();
+    $lastNo = DB::table('invoice_master')
+    ->orderBy('InvoiceMasterID', 'desc')
+    ->value('InvoiceNo');
+
+    $number = $lastNo ? (int) str_replace('YF-', '', $lastNo) + 1 : 1;
+
+    $vhno = 'YF-' . str_pad($number, 5, '0', STR_PAD_LEFT);
+
 
     return view('invoice_create', compact('invoice_type', 'items', 'supplier', 'vhno', 'saleman','party'))->with('error', 'Logout Successfully.')->with('class', 'success');
   }
@@ -1629,7 +1639,7 @@ else
     }
 
     $invoice_mst = array(
-      'InvoiceMasterID' => $request->input('VHNO'),
+      'InvoiceNo' => $request->input('InvoiceNo'),
       'InvoiceTypeID' => $request->input('InvoiceTypeID'),
       'LeadID' => session::get('LeadID'),
       'Date' => $request->input('Date'),
@@ -1699,7 +1709,8 @@ else
 
 
       $invoice_det = array(
-        'InvoiceMasterID' => $request->input('VHNO'),
+        // 'InvoiceMasterID' => $request->input('VHNO'),
+        'InvoiceMasterID' => $InvoiceMasterID,
         'ItemID' => $request->ItemID0[$i],
         'SupplierID' => $request->SupplierID[$i],
 
@@ -1731,12 +1742,12 @@ else
 
         // A/R
         $loop_AR = array(
-          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
           'JournalType' => $invoice_type[0]->InvoiceTypeCode,
           'ChartOfAccountID' => '110400',  // A/R
           'SupplierID' => $request->SupplierID[$i],
           'PartyID' => $request->PartyID,
-          'InvoiceMasterID' => $request->input('VHNO'),
+          'InvoiceMasterID' => $InvoiceMasterID,
           'Date' => $request->input('Date'),
           'Dr' => $request->ItemTotal[$i],
           'Narration' => $full_narration,
@@ -1746,12 +1757,12 @@ else
         $id = DB::table('journal')->insertGetId($loop_AR);
 
         $loop_purchase_cr = array(
-          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
           'JournalType' => $invoice_type[0]->InvoiceTypeCode,
           'ChartOfAccountID' => '510103',  // PURCHASE OF TICKET
           'SupplierID' => $request->SupplierID[$i],
           'PartyID' => $request->PartyID,
-          'InvoiceMasterID' => $request->input('VHNO'),
+          'InvoiceMasterID' => $InvoiceMasterID,
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
           'Narration' => $full_narration,
@@ -1763,12 +1774,12 @@ else
         if ($request->Service[$i] > 0) {
 
           $comission = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '410101', // COMISSION 
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Cr' => $request->Service[$i],
             'Narration' => $full_narration,
@@ -1782,12 +1793,12 @@ else
         ///////////////////udpatejune
         else {
           $comission = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '410101', // COMISSION 
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Dr' => abs($request->Service[$i]),
             'Narration' => $full_narration,
@@ -1799,12 +1810,12 @@ else
 
         // Purchase of Ticket - > PIA
         $loop_purchase_dr = array(
-          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
           'JournalType' => $invoice_type[0]->InvoiceTypeCode,
           'ChartOfAccountID' => '510103',  // PURCHASE OF TICKET
           'SupplierID' => $request->SupplierID[$i],
           'PartyID' => $request->PartyID,
-          'InvoiceMasterID' => $request->input('VHNO'),
+          'InvoiceMasterID' => $InvoiceMasterID,
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
           'Narration' => $full_narration,
@@ -1815,12 +1826,12 @@ else
 
         // A/P - > PIA
         $loop_ap = array(
-          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
           'JournalType' => $invoice_type[0]->InvoiceTypeCode,
           'ChartOfAccountID' => '210100',  // A/P - > PIA
           'SupplierID' => $request->SupplierID[$i],
           'PartyID' => $request->PartyID,
-          'InvoiceMasterID' => $request->input('VHNO'),
+          'InvoiceMasterID' => $InvoiceMasterID,
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
           'Narration' => $full_narration,
@@ -1835,12 +1846,12 @@ else
 
           // tax Debit
           $tax_payable = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => 210300, // TAX PAYABLES
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Cr' => $request->TaxAmount[$i],
             'Narration' => $full_narration,
@@ -1850,12 +1861,12 @@ else
 
           // tax credit from comission
           // $tax_expense = array(
-          //     'VHNO' => $invoice_type[0]->InvoiceTypeCode.$request->input('VHNO'), 
+          //     'VHNO' => $invoice_type[0]->InvoiceTypeCode.$InvoiceMasterID, 
           //     'JournalType' => $invoice_type[0]->InvoiceTypeCode, 
           //     'ChartOfAccountID' => 410101, // COMISSION (TAX WILL MINUS FROM COMISSION)
           //     'SupplierID' => $request->SupplierID[$i], 
           //     'PartyID' => $request->PartyID, 
-          //     'InvoiceMasterID' => $request->input('VHNO'), 
+          //     'InvoiceMasterID' => $InvoiceMasterID, 
           //     'Date' => $request->input('Date'),
           //     'Trace' => 112,
           //      'Dr' => $request->TaxAmount[$i], // kamal disable this code due to net amount posted in commsion. net off 100 - tax 
@@ -1866,12 +1877,12 @@ else
         } else {
           // tax Debit
           $tax_payable = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => 210300, // TAX PAYABLES
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Dr' => abs($request->TaxAmount[$i]),
             'Narration' => $full_narration,
@@ -1887,12 +1898,12 @@ else
         if ($request->Discount[$i] > 0) {
 
           $discount_given = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '410155', // Discount Received -> commsion update chart of account
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Dr' => $request->Discount[$i],
             'Narration' => $full_narration,
@@ -1914,12 +1925,12 @@ else
 
         // A/R
         $loop_AR = array(
-          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
           'JournalType' => $invoice_type[0]->InvoiceTypeCode,
           'ChartOfAccountID' => '110400',  // A/R
           'SupplierID' => $request->SupplierID[$i],
           'PartyID' => $request->PartyID,
-          'InvoiceMasterID' => $request->input('VHNO'),
+          'InvoiceMasterID' => $InvoiceMasterID,
           'Date' => $request->input('Date'),
           'Cr' => $request->ItemTotal[$i],
           'Narration' => $full_narration,
@@ -1931,12 +1942,12 @@ else
         if ($request->Service[$i] > 0) {
 
           $comission = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '410101', // COMISSION 
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Dr' => $request->Service[$i],
             'Narration' => $full_narration,
@@ -1946,12 +1957,12 @@ else
           $id = DB::table('journal')->insertGetId($comission);
         } else {
           $comission = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '410101', // COMISSION 
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Cr' => abs($request->Service[$i]),
             'Narration' => $full_narration,
@@ -1965,12 +1976,12 @@ else
         if ($request->Discount[$i] > 0) {
 
           $discount_rec = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '410101', // Discount Received -> commsion update chart of account
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Cr' => $request->Discount[$i],
             'Narration' => $full_narration,
@@ -1980,12 +1991,12 @@ else
           $id = DB::table('journal')->insertGetId($discount_rec);
         } else {
           $discount_rec = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '410101', // Discount Received 
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Dr' => abs($request->Discount[$i]),
             'Narration' => $full_narration,
@@ -1997,12 +2008,12 @@ else
 
         // Purchase of Ticket - > PIA - DEBIT
         $loop_purchase_dr = array(
-          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
           'JournalType' => $invoice_type[0]->InvoiceTypeCode,
           'ChartOfAccountID' => '510103',  // PURCHASE OF TICKET
           'SupplierID' => $request->SupplierID[$i],
           'PartyID' => $request->PartyID,
-          'InvoiceMasterID' => $request->input('VHNO'),
+          'InvoiceMasterID' => $InvoiceMasterID,
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
           'Narration' => $full_narration,
@@ -2013,12 +2024,12 @@ else
 
         // Purchase of Ticket - > PIA - CREDIT
         $loop_purchase_cr = array(
-          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
           'JournalType' => $invoice_type[0]->InvoiceTypeCode,
           'ChartOfAccountID' => '510103',  // PURCHASE OF TICKET
           'SupplierID' => $request->SupplierID[$i],
           'PartyID' => $request->PartyID,
-          'InvoiceMasterID' => $request->input('VHNO'),
+          'InvoiceMasterID' => $InvoiceMasterID,
           'Date' => $request->input('Date'),
           'Cr' => $request->Fare[$i],
           'Narration' => $full_narration,
@@ -2028,12 +2039,12 @@ else
 
         // A/P - > PIA
         $loop_ap = array(
-          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+          'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
           'JournalType' => $invoice_type[0]->InvoiceTypeCode,
           'ChartOfAccountID' => '210100',  // A/P - > PIA
           'SupplierID' => $request->SupplierID[$i],
           'PartyID' => $request->PartyID,
-          'InvoiceMasterID' => $request->input('VHNO'),
+          'InvoiceMasterID' => $InvoiceMasterID,
           'Date' => $request->input('Date'),
           'Dr' => $request->Fare[$i],
           'Narration' => $full_narration,
@@ -2048,12 +2059,12 @@ else
 
           // tax Debit
           $tax_payable = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => 210300, // TAX PAYABLES
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Dr' => $request->TaxAmount[$i],
             'Narration' => $full_narration,
@@ -2063,12 +2074,12 @@ else
 
           // tax credit from comission
           // $tax_expense = array(
-          //     'VHNO' => $invoice_type[0]->InvoiceTypeCode.$request->input('VHNO'), 
+          //     'VHNO' => $invoice_type[0]->InvoiceTypeCode.$InvoiceMasterID, 
           //     'JournalType' => $invoice_type[0]->InvoiceTypeCode, 
           //     'ChartOfAccountID' => 410101, // COMISSION (TAX WILL MINUS FROM COMISSION)
           //     'SupplierID' => $request->SupplierID[$i], 
           //     'PartyID' => $request->PartyID, 
-          //     'InvoiceMasterID' => $request->input('VHNO'), 
+          //     'InvoiceMasterID' => $InvoiceMasterID, 
           //     'Date' => $request->input('Date'),
           //     'Trace' => 112,
           //      'Dr' => $request->TaxAmount[$i], // kamal disable this code due to net amount posted in commsion. net off 100 - tax 
@@ -2079,12 +2090,12 @@ else
         } else {
           // tax Debit
           $tax_payable = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => 210300, // TAX PAYABLES
             'SupplierID' => $request->SupplierID[$i],
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Cr' => abs($request->TaxAmount[$i]),
             'Narration' => $full_narration,'Narration' => $full_narration,
@@ -2112,12 +2123,12 @@ else
         if ($request->PercentageValue > 0) {
 
              $bank_charges_dr = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '110400', // Account Receivable
             
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Dr' => $request->PercentageValue,
             'Narration' => 'Bank Charges Applied from '. $request->BankName . ' at rate of ' . $request->Percentage . '%',
@@ -2129,13 +2140,13 @@ else
 
 
           $bank_charges_cr = array(
-            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $request->input('VHNO'),
+            'VHNO' => $invoice_type[0]->InvoiceTypeCode . $InvoiceMasterID,
             'JournalType' => $invoice_type[0]->InvoiceTypeCode,
             'ChartOfAccountID' => '210318', // Bank Charges Recovery Income comes
             
             
             'PartyID' => $request->PartyID,
-            'InvoiceMasterID' => $request->input('VHNO'),
+            'InvoiceMasterID' => $InvoiceMasterID,
             'Date' => $request->input('Date'),
             'Cr' => $request->PercentageValue,
             'Narration' => 'Bank Charges Applied from '. $request->BankName . ' at rate of ' . $request->Percentage . '%',
@@ -3809,7 +3820,6 @@ $monthlyBankCharges = DB::table('v_journal')
 
   public  function PartiesEdit($id)
   {
-
     ///////////////////////USER RIGHT & CONTROL ///////////////////////////////////////////    
     $allow = check_role(session::get('UserID'), 'Party / Customers', 'Update');
     if ($allow[0]->Allow == 'N') {
@@ -3853,6 +3863,7 @@ $monthlyBankCharges = DB::table('v_journal')
 
       'PartyName' => $request->input('PartyName'),
       'Address' => $request->input('Address'),
+      'TRN' => $request->input('TRN'),
       'Phone' => $request->input('Phone'),
       'Email' => $request->input('Email'),
       'Active' => $request->input('Active'),
@@ -8349,7 +8360,7 @@ public function getParties(Request $request)
             $query->where('PartyName', 'like', "%$search%");
         }
 
-        $parties = $query->select('PartyID', 'PartyName', 'Phone')
+        $parties = $query->select('PartyID', 'PartyName', 'Phone','TRN')
                          ->limit(20)
                          ->get();
 

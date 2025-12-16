@@ -183,8 +183,8 @@ $company = DB::table('company')->first();
                             <label class="col-form-label" for="first-name">Invoice #</label>
                           </div>
                           <div class="col-sm-9">
-                            <input type="text" id="first-name" class="form-control" name="VHNO"
-                              value="{{$vhno[0]->VHNO}}" readonly="">
+                            <input type="text" id="first-name" class="form-control" name="InvoiceNo"
+                              value="{{$vhno}}" readonly="">
                           </div>
                         </div>
                       </div>
@@ -1422,7 +1422,7 @@ $(document).ready(function() {
                     results: $.map(data, function(item) {
                         return {
                             id: item.PartyID,
-                            text: item.PartyID + ' - ' + item.PartyName + ' - ' + item.Phone
+                            text: item.PartyID + ' - ' + item.PartyName + ' - ' + item.Phone + (item.TRN ? ' - ' + item.TRN : '')
                         };
                     })
                 };

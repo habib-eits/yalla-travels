@@ -259,7 +259,7 @@ $assets = DB::table('v_journal')
 $today_sale = DB::table('v_journal')
     ->selectRaw("
         SUM(IF(ChartOfAccountID = 110101, Dr, 0)) AS CASH,
-        SUM(IF(ChartOfAccountID = 110202, Dr, 0)) AS ADCB,
+        SUM(IF(ChartOfAccountID = 110202, Dr, 0)) AS WIO,
         SUM(IF(ChartOfAccountID = 110201, Dr, 0)) AS ENBD,
         SUM(IF(ChartOfAccountID = 110101, Dr, 0)) + 
         SUM(IF(ChartOfAccountID = 110202, Dr, 0)) + 
@@ -289,8 +289,8 @@ $today_sale = DB::table('v_journal')
         <div class="col-md-4 col-xl-3">
             <div class="card bg-c-green order-card">
                 <div class="card-block">
-                    <h6 class="m-b-20 text-white">ADCB BANK</h6>
-                    <h2 class="text-end text-white mt-3"><i class="mdi mdi-bank f-left"></i><span>{{number_format($today_sale->ADCB)}}</span></h2>
+                    <h6 class="m-b-20 text-white">WIO  BANK</h6>
+                    <h2 class="text-end text-white mt-3"><i class="mdi mdi-bank f-left"></i><span>{{number_format($today_sale->WIO)}}</span></h2>
                  </div>
             </div>
         </div>
@@ -298,7 +298,7 @@ $today_sale = DB::table('v_journal')
         <div class="col-md-4 col-xl-3">
             <div class="card bg-c-yellow order-card">
                 <div class="card-block">
-                    <h6 class="m-b-20 text-white">ENBD BANK</h6>
+                    <h6 class="m-b-20 text-white">WIO  BANK</h6>
                     <h2 class="text-end text-white mt-3"><i class="mdi mdi-bank f-left"></i><span>{{number_format($today_sale->ENBD)}}</span></h2>
                  </div>
             </div>
