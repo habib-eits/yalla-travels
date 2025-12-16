@@ -3795,6 +3795,7 @@ $monthlyBankCharges = DB::table('v_journal')
 
       'PartyName' => $request->input('PartyName'),
       'Address' => $request->input('Address'),
+      'TRN' => $request->input('TRN'),
       'Phone' => $request->input('Phone'),
       'Email' => $request->input('Email'),
       'Active' => $request->input('Active'),
@@ -3853,6 +3854,7 @@ $monthlyBankCharges = DB::table('v_journal')
 
       'PartyName' => $request->input('PartyName'),
       'Address' => $request->input('Address'),
+      'TRN' => $request->input('TRN'),
       'Phone' => $request->input('Phone'),
       'Email' => $request->input('Email'),
       'Active' => $request->input('Active'),

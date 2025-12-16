@@ -184,8 +184,8 @@ $company = DB::table('company')->first();
                           </div>
                           <div class="col-sm-9">
                             <input type="text" id="first-name" class="form-control" name="VHNO"
-                              value="{{$vhno[0]->VHNO}}" readonly="">
-                          </div>
+                              value="YF-{{$vhno[0]->VHNO}}" readonly="">
+                          </div> 
                         </div>
                       </div>
 
