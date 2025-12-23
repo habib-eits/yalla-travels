@@ -1,4 +1,33 @@
-<img src="{{ asset('icons/gps.png') }}" width="10px"> {{ $company->Address }}<br />
-<img src="{{ asset('icons/mobile.png') }}" width="10px"> {{ $company->Contact }} <br>
-<img src="{{ asset('icons/mobile.png') }}" width="10px"> {{ $company->Mobile }} <br />
-<img src="{{ asset('icons/email.png') }}" width="10px"> {{ $company->Email }}
+<div >
+    <div style="padding:5px; white-space: nowrap;">
+    <img src="{{ asset('assets/svg/location.svg') }}"
+         style="width:14px; height:14px; vertical-align: middle; margin-right:3px;">
+    <span style="vertical-align: middle;">
+        {{ $company->Address }}
+    </span>
+</div>
+<div style="padding:5px; white-space: nowrap;">
+    <img src="{{ asset('assets/svg/call.svg') }}"
+         style="width:14px; height:14px; vertical-align: middle; margin-right:3px;">
+    <span style="vertical-align: middle;">
+        {{ $company->Contact }}
+    </span>
+</div>
+@if($company->Mobile)
+<div style="padding:5px; white-space: nowrap;">
+    <img src="{{ asset('assets/svg/call.svg') }}"
+         style="width:14px; height:14px; vertical-align: middle; margin-right:3px;">
+    <span style="vertical-align: middle;">
+        {{ $company->Mobile }}
+    </span>
+</div>
+@endif
+<div style="padding:5px; white-space: nowrap;">
+    <img src="{{ asset('assets/svg/email.svg') }}"
+         style="width:14px; height:14px; vertical-align: middle; margin-right:3px;">
+    <span style="vertical-align: middle;">
+        {{ $company->Email }}
+    </span>
+</div>
+
+</div>

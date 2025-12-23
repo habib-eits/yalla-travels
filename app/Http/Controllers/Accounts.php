@@ -3042,6 +3042,7 @@ if ((optional($invoice)->Paid ?? 0) == (optional($invoice)->Total ?? 0)) {
 
     $filename = $invoice_mst[0]->InvoiceCode . '-' . $invoice_mst[0]->Date . '-PartyCode-' . $invoice_mst[0]->PartyID;
 
+    // return view('invoice_pdf', compact('balance', 'invoice_type', 'items', 'supplier', 'vhno', 'invoice_mst', 'invoice_det', 'company','voucher_detail'));
     $pdf = PDF::loadView('invoice_pdf', compact('balance', 'invoice_type', 'items', 'supplier', 'vhno', 'invoice_mst', 'invoice_det', 'company','voucher_detail'));
     $pdf->setpaper('A4', 'portiate');
 
@@ -3769,6 +3770,8 @@ $monthlyBankCharges = DB::table('v_journal')
 
   public  function SaveParties(request $request)
   {
+    
+    
     ///////////////////////USER RIGHT & CONTROL ///////////////////////////////////////////    
     $allow = check_role(session::get('UserID'), 'Party / Customers', 'List / Create');
     if ($allow[0]->Allow == 'N') {
@@ -3795,6 +3798,7 @@ $monthlyBankCharges = DB::table('v_journal')
 
       'PartyName' => $request->input('PartyName'),
       'Address' => $request->input('Address'),
+      'TRN' => $request->input('TRN'),
       'Phone' => $request->input('Phone'),
       'Email' => $request->input('Email'),
       'Active' => $request->input('Active'),
@@ -3853,6 +3857,7 @@ $monthlyBankCharges = DB::table('v_journal')
 
       'PartyName' => $request->input('PartyName'),
       'Address' => $request->input('Address'),
+      'TRN' => $request->input('TRN'),
       'Phone' => $request->input('Phone'),
       'Email' => $request->input('Email'),
       'Active' => $request->input('Active'),

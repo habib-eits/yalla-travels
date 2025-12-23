@@ -39,6 +39,12 @@
         .style3 {
             color: #FFFFFF
         }
+        .text-custom-color{
+            color:#771718;
+        }
+        .bg-custom-color{
+            background-color:#771718;
+        }
     </style>
 </head>
 @php
@@ -68,11 +74,12 @@
         </tr>
         <tr>
             <td></td>
-            <td width="50%" align="right" style="font-size: 28pt; font-weight: bolder;">
+            <td width="50%" align="right"  class="text-custom-color"
+                style="font-size: 28pt; font-weight: bolder;">
                 <br><br>
                 TAX INVOICE
-
             </td>
+
         </tr>
         <tr>
             <td>&nbsp;</td>
@@ -88,7 +95,9 @@
             <th width="50%" valign="bottom" scope="col">
                 <div align="left">Bill To<br />
                     {{ $invoice_mst[0]->PartyName }} <br /> {{ $invoice_mst[0]->Phone }} <br>
-                    TRN {{ $invoice_mst[0]->TRN }} </div>
+                    @if(!empty($invoice_mst[0]->TRN))
+                        TRN: {{ $invoice_mst[0]->TRN }}
+                    @endif
             </th>
             <th width="50%" scope="col">
                 <div align="right">
@@ -121,18 +130,12 @@
 
     </table>
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
-        <tr style="color: white; ">
-            <td align="center" height="25" bgcolor="#333333">#</p>
-            </td>
-            <td align="center" bgcolor="#333333">Item Descrption </p>
-            </td>
-            <td align="center" bgcolor="#333333">Taxable<br />
-                Amount</p>
-            </td>
-            <td align="center" bgcolor="#333333">VAT</p>
-            </td>
-            <td align="center" bgcolor="#333333">Amount</p>
-            </td>
+        <tr style="color: white;" class="bg-custom-color">
+            <td align="center" height="25" >#</td>
+            <td align="center" >Item Description</td>
+            <td align="center" >Taxable<br>Amount</td>
+            <td align="center" >VAT</td>
+            <td align="center" >Amount</td>
         </tr>
 
         <?php
@@ -255,7 +258,7 @@
     </table>
     <p>VAT Summary</p>
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
-        <tr style="background-color: #333333; color: white;">
+        <tr  class="bg-custom-color" style="color: white;">
             <td height="25" scope="col" align="left" width="50%" style="padding-left: 10px;">VAT Detail
             </td>
             <td scope="col" align="right">Taxable Amount (AED) </td>
