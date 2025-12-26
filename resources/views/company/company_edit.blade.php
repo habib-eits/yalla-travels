@@ -173,19 +173,18 @@ $DebitNoteTitle       = old('DebitNoteTitle') ? old('DebitNoteTitle') : $company
 
                     </div>
 
-                    <div class="mb-2 row d-none">
-                      <label for="example-url-input" class="col-md-3 col-form-label fw-bold">Digital Signature</label>
+                     <div class="mb-2 row">
+                      <label for="example-url-input" class="col-md-3 col-form-label fw-bold">Bank Details</label>
                       <div class="col-md-6">
 
-                        <textarea name="DigitalSignature" id="DigitalSignature" cols="30" rows="10">
-                          {{$DigitalSignature}}
-                        </textarea>
- <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
-                         <script>
-                CKEDITOR.replace( 'DigitalSignature',{
-                    height:350,
-                });
-        </script>
+                        <textarea name="DigitalSignature" id="DigitalSignature" cols="30" rows="10" class="form-control">{{$DigitalSignature}}</textarea>
+                        <p>press shift + enter for new line</p>
+                         {{-- <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+                                      <script>
+                              CKEDITOR.replace( 'DigitalSignature',{
+                                  height:350,
+                              });
+                      </script> --}}
                       </div>
 
                     </div>
