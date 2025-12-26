@@ -196,7 +196,7 @@
         @endforeach
 
         <tr>
-            <td colspan="8">
+            <td colspan="5">
                 <hr noshade="noshade" />
             </td>
         </tr>
@@ -209,23 +209,37 @@
 
         </tr>
         <tr>
-            <td colspan="8">
+            <td colspan="5">
                 <hr noshade="noshade" />
             </td>
         </tr>
         <tr>
-            <td colspan="8">
-                <table width="50%" border="0" align="right">
+            <td colspan="2" width="30%">
+                <table width="100%" border="0" align="left">
+
+                    <tr>
+                        <td height="25" align="left" style="padding-right: 25px;">
+                            <div style="line-height: 18px">
+                                {!! nl2br(e($company->DigitalSignature)) !!}
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </table>
+            </td>
+            <td colspan="3" width="70%">
+                <table width="100%" border="0" align="left">
 
                     <tr>
                         <td height="25" align="right" style="padding-right: 25px;"><strong>{{__('message.total')}}</strong></td>
-                        <td height="25"><strong>AED{{ number_format($invoice_mst[0]->Total, 2) }}</strong></td>
+                        <td height="25"><strong>AED {{ number_format($invoice_mst[0]->Total, 2) }}</strong></td>
                     </tr>
 
                     <tr>
                         <td height="25" align="right" style="padding-right: 25px;"><strong>Bank Charges</strong>
                         </td>
-                        <td height="25"><strong>AED{{ number_format($invoice_mst[0]->BankCharges, 2) }}</strong>
+                        <td height="25"><strong>AED {{ number_format($invoice_mst[0]->BankCharges, 2) }}</strong>
                         </td>
                     </tr>
 
@@ -233,7 +247,7 @@
                         <td height="25" align="right" style="padding-right: 25px;"><strong>Grand Total</strong>
                         </td>
                         <td height="25">
-                            <strong>AED{{ number_format($invoice_mst[0]->GrandTotal ?? $invoice_mst[0]->Total, 2) }}</strong>
+                            <strong>AED {{ number_format($invoice_mst[0]->GrandTotal ?? $invoice_mst[0]->Total, 2) }}</strong>
                         </td>
                     </tr>
                     <tr>
@@ -243,7 +257,7 @@
                     <tr style="background-color: #e9e9e9;">
                         <td height="25" align="right" style="padding-right: 25px;"><strong>Balance Due</strong>
                         </td>
-                        <td height="25"><strong>AED{{ number_format($invoice_mst[0]->Balance, 2) }}</strong></td>
+                        <td height="25"><strong>AED {{ number_format($invoice_mst[0]->Balance, 2) }}</strong></td>
                     </tr>
 
                     <tr>
