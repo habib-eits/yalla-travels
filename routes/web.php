@@ -366,31 +366,31 @@ Route::get('AttachmentDelete/{id}/{filename}', [Accounts::class, 'AttachmentDele
 Route::get('AttachmentRead', [Accounts::class, 'AttachmentRead']);
 
 
- });
+
 
 route::get('/tmp/',[Accounts::class,'tmp']); 
 
 Route::get('/Logout',[Accounts::class,'Logout']);
 
 Route::get('/upload/', function (){
-
+	
 	return view ('upload');
 });
 
- route::post('/upload1',[Accounts::class,'upload1']);
+route::post('/upload1',[Accounts::class,'upload1']);
 
 
 route::get('/Role/{UserID}',[Accounts::class,'Role']);
- route::post('/RoleSave',[Accounts::class,'RoleSave']);
- route::get('/RoleView/{UserID}',[Accounts::class,'RoleView']);
- route::post('/RoleUpdate',[Accounts::class,'RoleUpdate']);
+route::post('/RoleSave',[Accounts::class,'RoleSave']);
+route::get('/RoleView/{UserID}',[Accounts::class,'RoleView']);
+route::post('/RoleUpdate',[Accounts::class,'RoleUpdate']);
 
- route::get('/checkUserRole/{UserID}',[Accounts::class,'checkUserRole']);
+route::get('/checkUserRole/{UserID}',[Accounts::class,'checkUserRole']);
 
 
- route::get('/UserProfile',[Accounts::class,'UserProfile']);
- route::get('/ChangePassword',[Accounts::class,'ChangePassword']);
- route::post('/UpdatePassword',[Accounts::class,'UpdatePassword']);
+route::get('/UserProfile',[Accounts::class,'UserProfile']);
+route::get('/ChangePassword',[Accounts::class,'ChangePassword']);
+route::post('/UpdatePassword',[Accounts::class,'UpdatePassword']);
 
 
 Route::get('/ajax_party_list/',[Accounts::class,'ajax_party_list']);
@@ -400,112 +400,112 @@ Route::get('/ajax_party_list/',[Accounts::class,'ajax_party_list']);
 
 // CRM LINKS
 
-     // --------------------------------Compaign Routes----------------------------
-	 Route::get('campaigns', [CampaignController::class, 'index'])->name('campaign.index');
-	 Route::post('campaignCreate', [CampaignController::class, 'store'])->name('campaign.store');
-	 Route::get('campaignEdit/{id}', [CampaignController::class, 'edit'])->name('campaign.edit');
-	 Route::post('campaignUpdate', [CampaignController::class, 'update'])->name('campaign.update');
-	 Route::get('campaignDelete/{id}', [CampaignController::class, 'delete'])->name('campaign.delete');
- 
-	  // --------------------------------Branch Routes----------------------------
-	 Route::get('branches', [BranchController::class, 'index'])->name('branch.index');
-	 // Route::get('createbranch', [BranchController::class, 'create'])->name('branch.create');
-	 Route::post('storebranch', [BranchController::class, 'store'])->name('branch.store');
-	 Route::get('branchEdit/{id}', [BranchController::class, 'edit'])->name('branch.edit');
-	 Route::post('branchUpdate', [BranchController::class, 'update'])->name('branch.update');
-	 Route::get('branchDelete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
- 
-	 // --------------------------------Lead Routes----------------------------
-	 Route::get('leads', [LeadController::class, 'index'])->name('lead.index');
-	 Route::get('createlead', [LeadController::class, 'create'])->name('lead.create');
-	 Route::post('storelead', [LeadController::class, 'store'])->name('lead.store');
-	 Route::get('viewlead/{id}', [LeadController::class, 'show'])->name('lead.show');
-	 Route::get('editlead/{id}', [LeadController::class, 'edit'])->name('lead.edit');
-	 Route::post('updatelead/{id}', [LeadController::class, 'update'])->name('lead.update');
-	 Route::post('addLeadNote/', [LeadController::class, 'addLeadNote'])->name('lead.addNote');
-	 Route::get('leadDelete/{id}', [LeadController::class, 'delete'])->name('lead.delete');
-	 Route::post('bulkDeleteLeads', [LeadController::class, 'bulkDeleteLeads'])->name('lead.bulkDelete');
-	 Route::post('bulkReassignLeads', [LeadController::class, 'bulkReassignLeads'])->name('lead.bulkReassign');
-	 Route::post('bulkReassignNewLeads', [LeadController::class, 'bulkReassignNewLeads'])->name('lead.bulkReassignNew');
-	 Route::post('importlead', [LeadController::class, 'import'])->name('lead.import');
-	 Route::get('download/{file}', [LeadController::class, 'downloadFile'])->name('downloadFile');
+// --------------------------------Compaign Routes----------------------------
+Route::get('campaigns', [CampaignController::class, 'index'])->name('campaign.index');
+Route::post('campaignCreate', [CampaignController::class, 'store'])->name('campaign.store');
+Route::get('campaignEdit/{id}', [CampaignController::class, 'edit'])->name('campaign.edit');
+Route::post('campaignUpdate', [CampaignController::class, 'update'])->name('campaign.update');
+Route::get('campaignDelete/{id}', [CampaignController::class, 'delete'])->name('campaign.delete');
+
+// --------------------------------Branch Routes----------------------------
+Route::get('branches', [BranchController::class, 'index'])->name('branch.index');
+// Route::get('createbranch', [BranchController::class, 'create'])->name('branch.create');
+Route::post('storebranch', [BranchController::class, 'store'])->name('branch.store');
+Route::get('branchEdit/{id}', [BranchController::class, 'edit'])->name('branch.edit');
+Route::post('branchUpdate', [BranchController::class, 'update'])->name('branch.update');
+Route::get('branchDelete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
+
+// --------------------------------Lead Routes----------------------------
+Route::get('leads', [LeadController::class, 'index'])->name('lead.index');
+Route::get('createlead', [LeadController::class, 'create'])->name('lead.create');
+Route::post('storelead', [LeadController::class, 'store'])->name('lead.store');
+Route::get('viewlead/{id}', [LeadController::class, 'show'])->name('lead.show');
+Route::get('editlead/{id}', [LeadController::class, 'edit'])->name('lead.edit');
+Route::post('updatelead/{id}', [LeadController::class, 'update'])->name('lead.update');
+Route::post('addLeadNote/', [LeadController::class, 'addLeadNote'])->name('lead.addNote');
+Route::get('leadDelete/{id}', [LeadController::class, 'delete'])->name('lead.delete');
+Route::post('bulkDeleteLeads', [LeadController::class, 'bulkDeleteLeads'])->name('lead.bulkDelete');
+Route::post('bulkReassignLeads', [LeadController::class, 'bulkReassignLeads'])->name('lead.bulkReassign');
+Route::post('bulkReassignNewLeads', [LeadController::class, 'bulkReassignNewLeads'])->name('lead.bulkReassignNew');
+Route::post('importlead', [LeadController::class, 'import'])->name('lead.import');
+Route::get('download/{file}', [LeadController::class, 'downloadFile'])->name('downloadFile');
 
 
-	 Route::get('/fetch-leads', [LeadController::class, 'fetchLeads'])->name('fetch-leads');
+Route::get('/fetch-leads', [LeadController::class, 'fetchLeads'])->name('fetch-leads');
 
 
 
-	 Route::get('ajaxGetAgents/{id?}', [AjaxController::class, 'ajaxGetAgents']);
- 
- 
-	 Route::get('ajaxGetLeads/', [AjaxController::class, 'ajaxGetLeads'])->name('check-database');
-	 Route::get('ajaxGetBookingPayment/', [AjaxController::class, 'ajaxGetBookingPayment'])->name('check-booking');
- 
-	 // --------------------------------Lead Activity Routes----------------------------
- 
-	 Route::resource('lead-activity', LeadActivityController::class);
- 
- 
- 
- 
-	 // --------------------------------Staff Routes----------------------------
-	 Route::get('staff', [StaffController::class, 'index'])->name('staff.index');
-	 // Route::get('createstaffmember', [StaffController::class, 'create'])->name('staff.create');
-	 Route::post('storestaffmember', [StaffController::class, 'store'])->name('staff.store');
-	 Route::get('staffMemberEdit/{id}', [StaffController::class, 'edit'])->name('staff.edit');
-	 Route::post('staffMemberUpdate', [StaffController::class, 'update'])->name('staff.update');
-	 Route::get('staffMemberDelete/{id}', [StaffController::class, 'delete'])->name('staff.delete');
- 
- 
-	 // --------------------------------Services Routes----------------------------
-	 Route::get('services', [ServiceController::class, 'index'])->name('service.index');
-	 Route::post('serviceCreate', [ServiceController::class, 'store'])->name('service.store');
-	 Route::get('serviceEdit/{id}', [ServiceController::class, 'edit'])->name('service.edit');
-	 Route::post('serviceUpdate', [ServiceController::class, 'update'])->name('service.update');
-	 Route::get('serviceDelete/{id}', [ServiceController::class, 'delete'])->name('service.delete');
-	 Route::get('ajaxGetServices/{id?}', [AjaxController::class, 'ajaxGetServices']);
-	
-	 // --------------------------------SubServices Routes----------------------------
-	 Route::get('subServices', [SubServiceController::class, 'index'])->name('subService.index');
-	 Route::post('subServiceCreate', [SubServiceController::class, 'store'])->name('subService.store');
-	 Route::get('subServiceEdit/{id}', [SubServiceController::class, 'edit'])->name('subService.edit');
-	 Route::post('subServiceUpdate', [SubServiceController::class, 'update'])->name('subService.update');
-	 Route::get('subServiceDelete/{id}', [SubServiceController::class, 'delete'])->name('subService.delete');
-	 Route::get('ajaxGetSubservices/{id?}', [AjaxController::class, 'ajaxGetSubservices']);
- 
-	 // --------------------------------Status Routes----------------------------
-	 Route::get('statuses', [StatusController::class, 'index'])->name('status.index');
-	 Route::post('statusCreate', [StatusController::class, 'store'])->name('status.store');
-	 Route::get('statusEdit/{id}', [StatusController::class, 'edit'])->name('status.edit');
-	 Route::post('statusUpdate', [StatusController::class, 'update'])->name('status.update');
-	 Route::get('statusDelete/{id}', [StatusController::class, 'delete'])->name('status.delete');
- 
-	   // --------------------------------Qualified Status Routes----------------------------
-	 Route::get('qualifiedStatuses', [StatusController::class, 'qualifiedStatusIndex'])->name('qualifiedStatus.index');
-	 Route::post('qualifiedStatusCreate', [StatusController::class, 'qualifiedStatusStore'])->name('qualifiedStatus.store');
-	 Route::get('qualifiedStatusEdit/{id}', [StatusController::class, 'qualifiedStatusEdit'])->name('qualifiedStatus.edit');
-	 Route::post('qualifiedStatusUpdate', [StatusController::class, 'qualifiedStatusUpdate'])->name('qualifiedStatus.update');
-	 Route::get('qualifiedStatusDelete/{id}', [StatusController::class, 'qualifiedStatusDelete'])->name('qualifiedStatus.delete');
- 
-	 Route::get('/Booking', [BookingController::class, 'index']);
-	 Route::get('/calendar', [BookingController::class, 'calendar']);
- 
-	 Route::get('/ajax_booking', [BookingController::class, 'ajax_booking']);
-	 Route::get('/BookingCreate/{id}', [BookingController::class, 'BookingCreate']);
-	 Route::post('/BookingSave', [BookingController::class, 'BookingSave']);
- 
-	 Route::post('/BookingStore', [BookingController::class, 'store']);
-	 Route::post('/BookingUpdate', [BookingController::class, 'update']);
-	 Route::get('/BookingDelete/{id}', [BookingController::class, 'destroy']);
-	 Route::post('/BookingDraged/', [BookingController::class, 'BookingDraged']);
- 
-	 Route::get('/BookingEdit/{id}', [BookingController::class, 'BookingEdit']);
-	 Route::post('/BookingUpdate1', [BookingController::class, 'BookingUpdate1']);
- 
-	 Route::get('/BookingPayment/',[BookingController::class,'BookingPayment']);
-	 Route::get('/BookingStatus/{id}',[BookingController::class,'BookingStatus']);
-	 Route::get('/BookingView/{id}',[BookingController::class,'BookingView']);
-	 Route::get('/InvoiceDetailList/{itemid}/{startdate}/{enddate}',[Accounts::class,'InvoiceDetailList']);
+Route::get('ajaxGetAgents/{id?}', [AjaxController::class, 'ajaxGetAgents']);
+
+
+Route::get('ajaxGetLeads/', [AjaxController::class, 'ajaxGetLeads'])->name('check-database');
+Route::get('ajaxGetBookingPayment/', [AjaxController::class, 'ajaxGetBookingPayment'])->name('check-booking');
+
+// --------------------------------Lead Activity Routes----------------------------
+
+Route::resource('lead-activity', LeadActivityController::class);
+
+
+
+
+// --------------------------------Staff Routes----------------------------
+Route::get('staff', [StaffController::class, 'index'])->name('staff.index');
+// Route::get('createstaffmember', [StaffController::class, 'create'])->name('staff.create');
+Route::post('storestaffmember', [StaffController::class, 'store'])->name('staff.store');
+Route::get('staffMemberEdit/{id}', [StaffController::class, 'edit'])->name('staff.edit');
+Route::post('staffMemberUpdate', [StaffController::class, 'update'])->name('staff.update');
+Route::get('staffMemberDelete/{id}', [StaffController::class, 'delete'])->name('staff.delete');
+
+
+// --------------------------------Services Routes----------------------------
+Route::get('services', [ServiceController::class, 'index'])->name('service.index');
+Route::post('serviceCreate', [ServiceController::class, 'store'])->name('service.store');
+Route::get('serviceEdit/{id}', [ServiceController::class, 'edit'])->name('service.edit');
+Route::post('serviceUpdate', [ServiceController::class, 'update'])->name('service.update');
+Route::get('serviceDelete/{id}', [ServiceController::class, 'delete'])->name('service.delete');
+Route::get('ajaxGetServices/{id?}', [AjaxController::class, 'ajaxGetServices']);
+
+// --------------------------------SubServices Routes----------------------------
+Route::get('subServices', [SubServiceController::class, 'index'])->name('subService.index');
+Route::post('subServiceCreate', [SubServiceController::class, 'store'])->name('subService.store');
+Route::get('subServiceEdit/{id}', [SubServiceController::class, 'edit'])->name('subService.edit');
+Route::post('subServiceUpdate', [SubServiceController::class, 'update'])->name('subService.update');
+Route::get('subServiceDelete/{id}', [SubServiceController::class, 'delete'])->name('subService.delete');
+Route::get('ajaxGetSubservices/{id?}', [AjaxController::class, 'ajaxGetSubservices']);
+
+// --------------------------------Status Routes----------------------------
+Route::get('statuses', [StatusController::class, 'index'])->name('status.index');
+Route::post('statusCreate', [StatusController::class, 'store'])->name('status.store');
+Route::get('statusEdit/{id}', [StatusController::class, 'edit'])->name('status.edit');
+Route::post('statusUpdate', [StatusController::class, 'update'])->name('status.update');
+Route::get('statusDelete/{id}', [StatusController::class, 'delete'])->name('status.delete');
+
+// --------------------------------Qualified Status Routes----------------------------
+Route::get('qualifiedStatuses', [StatusController::class, 'qualifiedStatusIndex'])->name('qualifiedStatus.index');
+Route::post('qualifiedStatusCreate', [StatusController::class, 'qualifiedStatusStore'])->name('qualifiedStatus.store');
+Route::get('qualifiedStatusEdit/{id}', [StatusController::class, 'qualifiedStatusEdit'])->name('qualifiedStatus.edit');
+Route::post('qualifiedStatusUpdate', [StatusController::class, 'qualifiedStatusUpdate'])->name('qualifiedStatus.update');
+Route::get('qualifiedStatusDelete/{id}', [StatusController::class, 'qualifiedStatusDelete'])->name('qualifiedStatus.delete');
+
+Route::get('/Booking', [BookingController::class, 'index']);
+Route::get('/calendar', [BookingController::class, 'calendar']);
+
+Route::get('/ajax_booking', [BookingController::class, 'ajax_booking']);
+Route::get('/BookingCreate/{id}', [BookingController::class, 'BookingCreate']);
+Route::post('/BookingSave', [BookingController::class, 'BookingSave']);
+
+Route::post('/BookingStore', [BookingController::class, 'store']);
+Route::post('/BookingUpdate', [BookingController::class, 'update']);
+Route::get('/BookingDelete/{id}', [BookingController::class, 'destroy']);
+Route::post('/BookingDraged/', [BookingController::class, 'BookingDraged']);
+
+Route::get('/BookingEdit/{id}', [BookingController::class, 'BookingEdit']);
+Route::post('/BookingUpdate1', [BookingController::class, 'BookingUpdate1']);
+
+Route::get('/BookingPayment/',[BookingController::class,'BookingPayment']);
+Route::get('/BookingStatus/{id}',[BookingController::class,'BookingStatus']);
+Route::get('/BookingView/{id}',[BookingController::class,'BookingView']);
+Route::get('/InvoiceDetailList/{itemid}/{startdate}/{enddate}',[Accounts::class,'InvoiceDetailList']);
 
 Route::get('/query/',[Accounts::class,'query']); 
 
@@ -564,54 +564,55 @@ Route::post('/CompanyUpdate/', [CompanyController::class, 'CompanyUpdate']);
 Route::get('/CompanyDelete/{id}', [CompanyController::class, 'CompanyDelete']);
 
 
-    
- 
+
+
 
 Route::get('migrate', function () {
-    \Illuminate\Support\Facades\Artisan::call('migrate');
+	\Illuminate\Support\Facades\Artisan::call('migrate');
     dd("Migration Done");
 });
 
 Route::get('clear-cache', function () {
-    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+	\Illuminate\Support\Facades\Artisan::call('cache:clear');
     dd("Cache is cleared");
 });
 
 Route::get('optimize-clear', function () {
-    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+	\Illuminate\Support\Facades\Artisan::call('optimize:clear');
     dd("Optimize is completed");
-
+	
 });
 
 Route::get('key-generate', function () {
-    \Illuminate\Support\Facades\Artisan::call('key:generate');
+	\Illuminate\Support\Facades\Artisan::call('key:generate');
     dd("key is generated");
-
+	
 });
 
 Route::get('storage-link', function () {
-    \Illuminate\Support\Facades\Artisan::call('storage:link');
+	\Illuminate\Support\Facades\Artisan::call('storage:link');
     dd("Storage has been Linked");
-
+	
 });
 
 Route::get('db-seed', function () {
-    \Illuminate\Support\Facades\Artisan::call('db:seed');
+	\Illuminate\Support\Facades\Artisan::call('db:seed');
     dd("DB is seeded");
 });
 
 
 Route::get('/printers', [UmrahController::class, 'listPrinters'])->name('printers');
 Route::post('/print', [UmrahController::class, 'printFromPrinter'])->name('printFromPrinter');
- 		 
- // END OF CRM LINKS
- 
-Route::get('Backup', function () {
 
-        /* php artisan migrate */
-        \Artisan::call('database:backup');
-        dd("Done");
-    });
-    
-    
-    Route::get('/get-parties', [Accounts::class, 'getParties']);
+// END OF CRM LINKS
+
+Route::get('Backup', function () {
+	
+	/* php artisan migrate */
+	\Artisan::call('database:backup');
+	dd("Done");
+});
+
+
+Route::get('/get-parties', [Accounts::class, 'getParties']);
+}); // end of checkadmin middleware
