@@ -108,7 +108,7 @@
                         </tr>
                         <tr>
                             <th align="right" style="text-align:right;">Invoice Date :</th>
-                            <td align="right" style="text-align:right;">{{ $invoice_mst[0]->Date }}</td>
+                            <td align="right" style="text-align:right;">{{ dateformatman2($invoice_mst[0]->Date)}}</td>
                         </tr>
                         <tr>
                             <td align="right" style="text-align:right;">Terms :</td>
@@ -116,7 +116,7 @@
                         </tr>
                         <tr>
                             <td align="right" style="text-align:right;">Due Date :</td>
-                            <td align="right" style="text-align:right;">{{ $invoice_mst[0]->DueDate }}</td>
+                            <td align="right" style="text-align:right;">{{ dateformatman2($invoice_mst[0]->DueDate) }}</td>
                         </tr>
 
                         <tr>
@@ -289,8 +289,13 @@
             <td>&nbsp;</td>
         </tr>
     </table>
-    <p>Notes</p>
-    <p>Thanks for your business.</p>
+    <br>
+    <br>
+    <br>
+    <div align="center">
+            <p>Thank you for choosing YallaFly! <br>We appreciate your trust and look forward to planning more amazing journeys with you.</p>
+
+    </div>
     <hr noshade="noshade" />
     <p>&nbsp; </p>
 </body>

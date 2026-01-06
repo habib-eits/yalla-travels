@@ -606,12 +606,12 @@ Route::post('/print', [UmrahController::class, 'printFromPrinter'])->name('print
 
 // END OF CRM LINKS
 
-Route::get('Backup', function () {
+// Route::get('Backup', function () {
 	
-	/* php artisan migrate */
-	\Artisan::call('database:backup');
-	dd("Done");
-});
+// 	/* php artisan migrate */
+// 	\Artisan::call('database:backup');
+// 	dd("Done");
+// });
 
 
 Route::get('/get-parties', [Accounts::class, 'getParties']);

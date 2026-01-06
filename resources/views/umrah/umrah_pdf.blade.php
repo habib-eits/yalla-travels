@@ -311,9 +311,14 @@ $company = DB::table('company')->first(); ?>
             <td>&nbsp;</td>
         </tr>
     </table>
-    <p>Notes</p>
-    <p>Thanks for your business.</p>
+    <br>
+    <br>
+    <div align="center">
+            <p>Thank you for choosing YallaFly! <br>We appreciate your trust and look forward to planning more amazing journeys with you.</p>
+
+    </div>
     <hr noshade="noshade" />
+    <p>&nbsp; </p>
     
 
 </body>
